@@ -18,12 +18,21 @@ def list_output_without_copy(wrapped_rule, date_ranges):
 def list_output_with_copy(wrapped_rule, date_ranges):
     list_wrapped_rules = []
     for date_range in date_ranges:
+
         new_wrapped_rule = copy(wrapped_rule)
+
+        # messing up with the deeper level object, even old object before copy will be affected
+        new_wrapped_rule['rules']['param1'] = 'wrong setting'
+
+        # here will be only copy affected
+        new_wrapped_rule['new_key'] = 'only copy affected'
+
         new_wrapped_rule['date_range'] = date_range
         list_wrapped_rules.append(new_wrapped_rule)
     return list_wrapped_rules
 
-def test_object_change():
+
+def test_shallow_copy():
     rule = get_me_rule()
 
     date_ranges = [{'from': '2018-01-05', 'to': '2018-03-22'}, {'from': '2018-04-05', 'to': '2018-07-22'}]
@@ -32,13 +41,15 @@ def test_object_change():
 
     wrapped_rule = {"rules": rule, "source": 'internet', "date_range": None}
 
+    # Correct
+    print("List output with copy:")
+    print(list_output_with_copy(wrapped_rule, date_ranges))
+
     # Both wrapped rules with the same date range
     print("List output without copy: (problem - rewriting the same object in array - the same date range)")
     print(list_output_without_copy(wrapped_rule, date_ranges))
 
-    print("List output with copy:")
-    print(list_output_with_copy(wrapped_rule, date_ranges))
 
 
 if __name__ == "__main__":
-    test_object_change()
+    test_shallow_copy()
