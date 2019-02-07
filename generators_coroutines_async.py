@@ -110,3 +110,24 @@ pf.__next__()
 
 sentence = "Bob is running behind a fast moving car"
 producer(sentence, pf)
+pf.close()
+pt.close()
+
+
+"""
+Yield and yield from
+"""
+def iterable1():
+    yield 1
+    yield 2
+
+def iterable2():
+    yield from iterable1()
+    yield 3
+
+assert list(iterable2) == [1, 2, 3]
+
+"""
+From what I see now asyncio just adds interface to easily work with coroutines
+You can await another coroutine function without all the manual things written in up examples
+"""

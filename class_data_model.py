@@ -18,12 +18,11 @@ class Polynomial():
         return len(self.coeffs)
 
 
-
-
 class AbstractClass(object):
     """
-    This stupid example shows how you can instantiate object,
-    and return different value, in this case you need to call __init__ method manualy,
+    Just to see what needs to happen when creating an class instance.
+    Example shows how you can instantiate object,
+    and return different value, in this case you need to call __init__ method of the super class manualy,
     because init is called only when the instance object is returned from __new__ method.
     """
     def __new__(cls, a, b):
@@ -35,15 +34,33 @@ class AbstractClass(object):
         print("Initializing Instance", a, b)
 
 
+class Function:
+    def __call__(self, x, y):
+        return x + y
+
+
+function = Function()
+
+
+def function2(x, y):
+    """
+    This is just more simple way of doing the same as former
+    """
+    return x + y
+
 
 def main():
-    a = Polynomial(2,3,4)
-    b = Polynomial(2,3,4)
-    print(a + b)
+    # a = Polynomial(2,3,4)
+    # b = Polynomial(2,3,4)
+    # print(a + b)
+
+    returned_from_new = AbstractClass(2, 3)
+    print(returned_from_new)
+
+    print(function(2, 6))
 
 
-    #b = AbstractClass(2, 3)
+if __name__ == "__main__":
 
-if __name__=="__main__":
     main()
 
