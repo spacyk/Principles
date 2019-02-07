@@ -1,4 +1,23 @@
 from copy import copy
+from collections import OrderedDict, Counter, namedtuple
+
+
+def some_collctions():
+    # Remembers the order the keys are added!
+    x = OrderedDict(a=1, b=2, c=3)
+    # Counts the frequency of each character
+    y = Counter("Hello World!")
+
+
+def example_namedtuple():
+    """Namedtuples example"""
+    Room = namedtuple('Room', ['room_size', 'price', 'sunlight', 'flat_rooms'])
+
+    flat = Room(30, 600, True, 3)
+
+    if flat.price <= 620:
+        print('take it!')
+
 
 def get_me_rule():
     rule = {}
