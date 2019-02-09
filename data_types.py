@@ -1,74 +1,92 @@
-from copy import copy
+from copy import copy, deepcopy
 from collections import OrderedDict, Counter, namedtuple
 
 
-def some_collctions():
-    # Remembers the order the keys are added!
+class CustomList:
+    """
+    This is all you need, to implement iterable list.
+    """
+    def __init__(self, *lst):
+        self._lst = lst
+
+    def __getitem__(self, item):
+        return self._lst[item]
+
+
+def example_some_collections():
+    # Remembers the order of the added keys
     x = OrderedDict(a=1, b=2, c=3)
     # Counts the frequency of each character
     y = Counter("Hello World!")
-
-
-def example_namedtuple():
-    """Namedtuples example"""
-    Room = namedtuple('Room', ['room_size', 'price', 'sunlight', 'flat_rooms'])
-
-    flat = Room(30, 600, True, 3)
-
+    # Namedtuple example
+    Flat = namedtuple('Flat', ['flat_size', 'price', 'sunlight', 'rooms'])
+    flat = Flat(80, 600, True, 3)
     if flat.price <= 620:
         print('take it!')
 
 
-def get_me_rule():
-    rule = {}
-    rule['param1'] = "first setting"
-    rule['param2'] = "second setting"
-    return rule
+def get_config():
+    config = dict()
+    config['order'] = ''
+    return config
 
 
-def list_output_without_copy(wrapped_rule, date_ranges):
-    list_wrapped_rules = []
-    for date_range in date_ranges:
-        wrapped_rule['date_range'] = date_range
-        list_wrapped_rules.append(wrapped_rule)
-    return list_wrapped_rules
+def list_output_without_copy(wrapped_setting, date_ranges):
+    list_wrapped_settings = []
+    for index, date_range in enumerate(date_ranges):
+        wrapped_setting['config']['order'] = f'rule number {index}'
+        wrapped_setting['date_range'] = date_range
+        list_wrapped_settings.append(wrapped_setting)
+    return list_wrapped_settings
 
 
-def list_output_with_copy(wrapped_rule, date_ranges):
-    list_wrapped_rules = []
-    for date_range in date_ranges:
-
-        new_wrapped_rule = copy(wrapped_rule)
-
-        # messing up with the deeper level object, even old object before copy will be affected
-        new_wrapped_rule['rules']['param1'] = 'wrong setting'
-
-        # here will be only copy affected
-        new_wrapped_rule['new_key'] = 'only copy affected'
-
-        new_wrapped_rule['date_range'] = date_range
-        list_wrapped_rules.append(new_wrapped_rule)
-    return list_wrapped_rules
+def list_output_with_shallow_copy(wrapped_setting, date_ranges):
+    list_wrapped_settings = []
+    for index, date_range in enumerate(date_ranges):
+        new_wrapped_setting = copy(wrapped_setting)
+        new_wrapped_setting['config']['order'] = f'rule number {index}'
+        new_wrapped_setting['date_range'] = date_range
+        list_wrapped_settings.append(new_wrapped_setting)
+    return list_wrapped_settings
 
 
-def test_shallow_copy():
-    rule = get_me_rule()
+def list_output_with_deep_copy(wrapped_setting, date_ranges):
+    list_wrapped_settings = []
+    for index, date_range in enumerate(date_ranges):
+        new_wrapped_setting = deepcopy(wrapped_setting)
+        new_wrapped_setting['config']['order'] = f'rule number {index}'
+        new_wrapped_setting['date_range'] = date_range
+        list_wrapped_settings.append(new_wrapped_setting)
+    return list_wrapped_settings
 
+
+def test_data_output():
+    """
+    Example of working with mutable data type - dict,
+    
+    In the first attempt we see, we update the same wrapper setting 2 times, so only the last update is preserved.
+    In the final list then we have the same dict instance 2 times.
+    
+    In the second test with shallow copy, each wrapper setting is new dict instance, so the date range is updated
+    for each one separately, but the inner config dict is in both settings the same. That's why you will get for both
+    of them "order='rule number 1'" (only the last value).
+
+    Only in the third example this all works correctly, because of the deepcopy. This means, that not only the
+    wrapped setting will be new dict instance during the iteration, but also the inner config dict is always new dict.
+    """
+    config = get_config()
     date_ranges = [{'from': '2018-01-05', 'to': '2018-03-22'}, {'from': '2018-04-05', 'to': '2018-07-22'}]
+    wrapped_settings = {"config": config, "source": 'internet', "date_range": None}
 
-    list_wrapped_rules = []
+    print("List output without copy:")
+    print(list_output_without_copy(wrapped_settings, date_ranges))
 
-    wrapped_rule = {"rules": rule, "source": 'internet', "date_range": None}
+    print("List output using shallow copy:")
+    print(list_output_with_shallow_copy(wrapped_settings, date_ranges))
 
-    # Correct
-    print("List output with copy:")
-    print(list_output_with_copy(wrapped_rule, date_ranges))
-
-    # Both wrapped rules with the same date range
-    print("List output without copy: (problem - rewriting the same object in array - the same date range)")
-    print(list_output_without_copy(wrapped_rule, date_ranges))
-
+    print("List output using deep copy:")
+    print(list_output_with_deep_copy(wrapped_settings, date_ranges))
 
 
 if __name__ == "__main__":
-    test_shallow_copy()
+    test_data_output()
