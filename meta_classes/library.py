@@ -4,7 +4,7 @@ e.g. bar
 There are 3 answers to this
 1. build_class - not used much, but good to know it's there
 2. meta_classes
-3. using __init_subclass__ method - the best way
+3. using __init_subclass__ method - probably the best way
 """
 
 

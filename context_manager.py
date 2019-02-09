@@ -36,6 +36,7 @@ def temptable(cur):
     yield
     cur.execute('drop table points;')
 
+
 @contextmanager
 def temptable2(cur):
     cur.execute('create table points(x int, y int);')
@@ -57,5 +58,6 @@ def execute_queries():
                 print(row)
             for row in cur.execute('select sum(x * y) from points;'):
                 print(row)
+
 
 execute_queries()
