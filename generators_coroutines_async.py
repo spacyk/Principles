@@ -1,6 +1,43 @@
+from time import sleep
+
+"""
+Generators
+You don't need to define class with __iter__ and __next__ methods to have generator.
+You just need to yield values as in compute function.
+"""
+
+
+class Compute:
+    def __iter__(self):
+        self.last = 0
+        return self
+
+    def __next__(self):
+        rv = self.last
+        self.last += 1
+        if self.last > 10:
+            raise StopIteration
+        sleep(.5)
+        return rv
+
+
+def compute():
+    for i in range(10):
+        sleep(.5)
+        yield i
+
+
+def test_generators():
+    for val in Compute():
+        print(val)
+
+    for val in compute():
+        print(val)
+
+
+""""""
 
 # Example of basic async understanding
-
 async def coro():
     await other_coro()
     sync()
@@ -130,4 +167,5 @@ assert list(iterable2) == [1, 2, 3]
 """
 From what I see now asyncio just adds interface to easily work with coroutines
 You can await another coroutine function without all the manual things written in up examples
+"""
 """
