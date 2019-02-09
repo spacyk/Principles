@@ -50,5 +50,5 @@ class Base:
         return self.bar()
 
     def __init_subclass__(cls, **kwargs):
-        print('init subclass')
+        print('init subclass... check if bar defined')
         return super().__init_subclass__(cls, **kwargs)
