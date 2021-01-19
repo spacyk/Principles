@@ -1,7 +1,6 @@
 # Principles
 
 Mainly some basic or intermediate python concepts.
-
-*Educational purposes
+For educational purposes.
 
 *Not actively maintained
