@@ -1,2 +1,2 @@
 # Principles
-Educational purpose - principles for python data manipulation
+Educational purpose - some basic python concepts
